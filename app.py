@@ -1,0 +1,89 @@
+from flask import Flask, render_template, request, redirect
+import sqlite3
+import string, random
+import os
+
+app = Flask(__name__)
+
+# --- Inicializar banco de dados ---
+def init_db():
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS links (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    original_url TEXT NOT NULL,
+                    short_code TEXT UNIQUE NOT NULL,
+                    clicks INTEGER DEFAULT 0
+                )''')
+    conn.commit()
+    conn.close()
+
+init_db()
+
+# --- Função para gerar código curto ---
+def generate_short_code(length=6):
+    chars = string.ascii_letters + string.digits
+    return ''.join(random.choice(chars) for _ in range(length))
+
+# --- Rota principal ---
+@app.route("/", methods=["GET", "POST"])
+def index():
+    if request.method == "POST":
+        original_url = request.form["url"]
+        custom_code = request.form.get("custom")
+
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
+
+        if custom_code and custom_code.strip() != "":
+            short_code = custom_code.strip()
+            c.execute("SELECT id FROM links WHERE short_code=?", (short_code,))
+            if c.fetchone():
+                suggestion = short_code + str(random.randint(100, 999))
+                conn.close()
+                return render_template("index.html", short_url=None,
+                                       error=f"Código já existe! Sugestão: {suggestion}")
+        else:
+            short_code = generate_short_code()
+
+        # Salvar no banco
+        c.execute("INSERT INTO links (original_url, short_code) VALUES (?, ?)",
+                  (original_url, short_code))
+        conn.commit()
+        conn.close()
+
+        return render_template("index.html", 
+                               short_url=f"/s/{short_code}")
+
+    return render_template("index.html", short_url=None)
+
+# --- Redirecionamento ---
+@app.route("/s/<short_code>")
+def redirect_url(short_code):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute("SELECT original_url, clicks FROM links WHERE short_code=?", (short_code,))
+    result = c.fetchone()
+
+    if result:
+        original_url, clicks = result
+        c.execute("UPDATE links SET clicks=? WHERE short_code=?", (clicks+1, short_code))
+        conn.commit()
+        conn.close()
+        return redirect(original_url)
+    else:
+        conn.close()
+        return "Link não encontrado!", 404
+
+# --- Estatísticas ---
+@app.route("/stats")
+def stats():
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute("SELECT original_url, short_code, clicks FROM links")
+    links = c.fetchall()
+    conn.close()
+    return render_template("stats.html", links=links)
+
+if __name__ == "__main__":
+    app.run(debug=True)

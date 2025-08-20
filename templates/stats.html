@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H-Links | Estatísticas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stats.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Estatísticas</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Link Curto</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for link in links %}
+                    <tr>
+                        <!-- aqui o link aparece cortado mas mostra completo ao passar o mouse -->
+                        <td><a href="{{ link[0] }}" target="_blank" title="{{ link[0] }}">{{ link[0] }}</a></td>
+                        <td><a href="/s/{{ link[1] }}" target="_blank">http://127.0.0.1:5000/s/{{ link[1] }}</a></td>
+                        <td>{{ link[2] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/" class="back-link">⬅ Voltar</a>
+    </div>
+</body>
+</html>
