@@ -1,7 +1,4 @@
-# criar constraints.txt
-echo "pip>=24.2
+﻿pip>=24.2
 setuptools>=65.5.0
-wheel>=0.41.0" > constraints.txt
+wheel>=0.41.0
 
-# editar requirements.txt para começar com:
-# -c constraints.txt
