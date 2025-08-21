@@ -3,30 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>H-Links | Estatísticas</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='stats.css') }}">
+    <title>📊 Estatísticas - H-Links</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>📊 Estatísticas</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Link Curto</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for link in links %}
-                    <tr>
-                        <!-- aqui o link aparece cortado mas mostra completo ao passar o mouse -->
-                        <td><a href="{{ link[0] }}" target="_blank" title="{{ link[0] }}">{{ link[0] }}</a></td>
-                        <td><a href="/s/{{ link[1] }}" target="_blank">http://127.0.0.1:5000/s/{{ link[1] }}</a></td>
-                        <td>{{ link[2] }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <a href="/" class="back-link">⬅ Voltar</a>
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="logo">⚡ H-Links ⚡</div>
+        <nav>
+            <a href="/">🏠 Início</a>
+            <button id="toggleDark">🌙 Modo Escuro</button>
+        </nav>
     </div>
+
+    <div class="container">
+        <h1>📊 Estatísticas Gerais</h1>
+
+        <!-- Cards de resumo -->
+        <div class="stats-cards">
+            <div class="card">
+                <h2>{{ total_links }}</h2>
+                <p>Links criados</p>
+            </div>
+            <div class="card">
+                <h2>{{ total_clicks }}</h2>
+                <p>Cliques totais</p>
+            </div>
+            <div class="card">
+                <h2>{{ top_link[1] if top_link else '-' }}</h2>
+                <p>Mais acessado</p>
+            </div>
+        </div>
+
+        <!-- Gráfico -->
+        <div class="chart-container">
+            <canvas id="linksChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Ativar dark mode
+        document.getElementById("toggleDark").addEventListener("click", () => {
+            document.body.classList.toggle("dark");
+        });
+
+        // Dados do backend
+        const labels = {{ labels|tojson }};
+        const data = {{ data|tojson }};
+
+        // Gráfico Chart.js
+        new Chart(document.getElementById('linksChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Cliques por link',
+                    data: data,
+                    backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                    borderColor: 'rgba(99, 102, 241, 1)',
+                    borderWidth: 1,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
 </body>
 </html>

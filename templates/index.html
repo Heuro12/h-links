@@ -5,10 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>H-Links | Encurtador</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function copyLink() {
+            let copyText = document.getElementById("shortLink");
+            navigator.clipboard.writeText(copyText.value);
+
+            let btn = document.getElementById("copyBtn");
+            btn.innerText = "✅ Copiado!";
+            btn.style.background = "#4CAF50";
+            setTimeout(() => {
+                btn.innerText = "📋 Copiar";
+                btn.style.background = "";
+            }, 2000);
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark");
+        }
+    </script>
 </head>
 <body>
+    <!-- Barra superior -->
+    <header class="topbar">
+        <h2 class="logo">⚡ H-Links ⚡</h2>
+        <nav>
+            <a href="/stats">📊 Estatísticas</a>
+            <button onclick="toggleTheme()">🌙</button>
+        </nav>
+    </header>
+
+    <!-- Conteúdo principal -->
     <div class="container">
-        <h1>⚡ H-Links ⚡</h1>
         <p class="subtitle">Crie links curtos, rápidos e com sugestões personalizadas!</p>
 
         <form method="POST">
@@ -24,11 +51,22 @@
         {% if short_url %}
             <div class="result">
                 <p>✅ Seu link encurtado:</p>
-                <a href="{{ short_url }}" target="_blank">http://127.0.0.1:5000{{ short_url }}</a>
+                <input id="shortLink" type="text" value="http://127.0.0.1:5000{{ short_url }}" readonly>
+                <button id="copyBtn" onclick="copyLink()">📋 Copiar</button>
+
+                <div class="qrcode">
+                    <p>📱 QR Code do seu link:</p>
+                    <img src="{{ qr_url }}" alt="QR Code" width="150">
+                    <p><a href="{{ qr_download }}" download>⬇️ Baixar QR Code</a></p>
+                </div>
+
+                <div class="share">
+                    <p>🔗 Compartilhar:</p>
+                    <a href="https://wa.me/?text=http://127.0.0.1:5000{{ short_url }}" target="_blank">WhatsApp</a>
+                    <a href="https://t.me/share/url?url=http://127.0.0.1:5000{{ short_url }}" target="_blank">Telegram</a>
+                </div>
             </div>
         {% endif %}
-
-        <a href="/stats" class="stats-link">📊 Ver estatísticas</a>
     </div>
 </body>
 </html>

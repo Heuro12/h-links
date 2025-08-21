@@ -1,134 +1,239 @@
-/* Reset */
+/* =========================
+   Reset básico
+========================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Inter", "Segoe UI", sans-serif;
 }
 
-/* Estilo base */
+/* =========================
+   Body e Layout
+========================= */
 body {
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-    color: #fff;
+    background: #f5f6fa;
+    color: #333;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    padding: 0 15px;
+    transition: background 0.3s, color 0.3s;
 }
 
-/* Container */
-.container {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 2rem;
+/* =========================
+   Topbar
+========================= */
+.topbar {
     width: 100%;
-    max-width: 400px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    transition: 0.3s;
-}
-
-/* Título */
-h1 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-}
-
-/* Inputs */
-input {
-    width: 100%;
-    padding: 0.9rem;
-    border-radius: 10px;
-    border: none;
-    margin-bottom: 1rem;
-    outline: none;
-    font-size: 1rem;
-}
-
-/* Botão */
-button {
-    width: 100%;
-    padding: 0.9rem;
-    border: none;
-    border-radius: 10px;
-    background: #3b82f6;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-button:hover {
-    background: #2563eb;
-}
-
-/* Resultado do QR */
-#qrcode {
-    margin-top: 1.5rem;
-}
-
-/* QR code ajustável */
-#qrcode img {
-    max-width: 100%;
-    height: auto;
+    max-width: 900px;
+    padding: 15px 20px;
+    background: #fff;
     border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* --------------------
-   Responsividade
--------------------- */
-
-/* Telas pequenas (celular) */
-@media (max-width: 600px) {
-    .container {
-        max-width: 90%;
-        padding: 1.5rem;
-    }
-
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    input, button {
-        font-size: 0.9rem;
-        padding: 0.8rem;
-    }
+.logo {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #6c63ff;
 }
 
-/* Telas grandes (PC/Notebook) */
-@media (min-width: 1024px) {
-    .container {
-        max-width: 500px;
-        padding: 2.5rem;
-    }
+.topbar nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
-    h1 {
-        font-size: 2.5rem;
-    }
-
-    input, button {
-        font-size: 1.1rem;
-        padding: 1rem;
-    }
-}.btn-estatistica {
-    display: inline-block;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    color: #fff;
+.topbar nav a {
     text-decoration: none;
-    padding: 12px 20px;
+    font-weight: 500;
+    color: #333;
+    transition: color 0.2s;
+}
+
+.topbar nav a:hover {
+    color: #6c63ff;
+}
+
+.topbar nav button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #eee;
+    transition: background 0.2s;
+}
+
+.topbar nav button:hover {
+    background: #ddd;
+}
+
+/* =========================
+   Container principal
+========================= */
+.container {
+    background: #fff;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+h1 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* =========================
+   Formulário
+========================= */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+form input, form button {
+    padding: 12px;
     border-radius: 8px;
-    font-size: 16px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+}
+
+form input:focus {
+    border-color: #6c63ff;
+    outline: none;
+}
+
+form button {
+    background: #6c63ff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+form button:hover {
+    background: #5750d3;
+}
+
+/* =========================
+   Resultados
+========================= */
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+.result input {
+    width: 80%;
+    margin-bottom: 10px;
+}
+
+.result button {
+    margin-left: 5px;
+    padding: 10px 16px;
+}
+
+/* QR Code e Compartilhar */
+.qrcode, .share {
+    margin-top: 15px;
+}
+
+.qrcode img {
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.share a {
+    margin: 0 5px;
+    text-decoration: none;
+    color: #6c63ff;
     font-weight: bold;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-  }
-  
-  .btn-estatistica:hover {
-    transform: scale(1.05);
-    background: linear-gradient(135deg, #2575fc, #6a11cb);
-  }
-  
+}
+
+/* =========================
+   Dark Mode
+========================= */
+body.dark {
+    background: #1e1e1e;
+    color: #eee;
+}
+
+body.dark .topbar {
+    background: #2a2a2a;
+}
+
+body.dark .topbar nav a {
+    color: #eee;
+}
+
+body.dark .topbar nav button {
+    background: #444;
+    color: #fff;
+}
+
+body.dark .container {
+    background: #2a2a2a;
+    color: #eee;
+}
+
+body.dark form input,
+body.dark .result input {
+    background: #3a3a3a;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+body.dark form button {
+    background: #8b84ff;
+}
+
+body.dark .share a {
+    color: #8b84ff;
+}
+
+/* =========================
+   Responsividade
+========================= */
+@media (max-width: 600px) {
+    .topbar {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    form input, form button {
+        font-size: 0.9rem;
+    }
+
+    .result input {
+        width: 100%;
+    }
+}
+

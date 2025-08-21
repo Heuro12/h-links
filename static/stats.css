@@ -1,124 +1,78 @@
-/* Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* =========================
+   Tabelas de estatísticas
+========================= */
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto;
 }
 
-/* Estilo base */
-body {
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* não centraliza vertical, permite scroll */
-    min-height: 100vh;
-    padding-top: 50px; /* espaço superior */
-}
-
-/* Container */
-.container {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 2rem;
-    width: 90%;
-    max-width: 900px; /* maior que index */
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    text-align: left;
-    transition: 0.3s;
-    color: #fff;
-}
-
-/* Título */
-h1 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-    text-align: center;
-}
-
-/* Tabela */
 table {
     width: 100%;
     border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-th, td {
+table th, table td {
     padding: 12px 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    word-break: break-all; /* links longos quebram linha */
-    vertical-align: middle;
-}
-
-th {
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    color: #fff;
     text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.9rem;
 }
 
-tr:nth-child(even) {
-    background: rgba(255,255,255,0.05);
+table th {
+    background: #6c63ff;
+    color: #fff;
+    text-align: center;
 }
 
-/* Links */
-td a {
-    color: #3b82f6;
+table td {
+    background: #fafafa;
+}
+
+table tr:nth-child(even) td {
+    background: #f0f0f0;
+}
+
+table td a {
+    color: #6c63ff;
     text-decoration: none;
-    max-width: 250px;
-    display: inline-block;
+}
+
+table td button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    background: #6c63ff;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+table td button:hover {
+    background: #5750d3;
+}
+
+/* Links muito longos ficam cortados */
+.truncate {
+    max-width: 200px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-td a:hover {
-    text-decoration: underline;
+/* Dark Mode ajustado para tabelas */
+body.dark table th {
+    background: #8b84ff;
 }
 
-/* Botão voltar */
-.back-link, .btn-estatistica {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 12px 20px;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    color: #fff;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
+body.dark table td {
+    background: #2a2a2a;
+    color: #eee;
+    border-bottom: 1px solid #444;
 }
 
-.back-link:hover, .btn-estatistica:hover {
-    transform: scale(1.05);
-    background: linear-gradient(135deg, #2575fc, #6a11cb);
+body.dark table tr:nth-child(even) td {
+    background: #242424;
 }
-
-/* Responsividade */
-@media (max-width: 600px) {
-    .container {
-        width: 95%;
-        padding: 1.5rem;
-    }
-
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    td a {
-        max-width: 150px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .container {
-        padding: 2.5rem;
-    }
-
-    h1 {
-        font-size: 2.5rem;
-    }
-}
-

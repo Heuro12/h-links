@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, send_file, jsonify
 import sqlite3
 import string, random
 import os
+import qrcode
+import io
 
 app = Flask(__name__)
 
@@ -52,8 +54,10 @@ def index():
         conn.commit()
         conn.close()
 
-        return render_template("index.html", 
-                               short_url=f"/s/{short_code}")
+        return render_template("index.html",
+                               short_url=f"/s/{short_code}",
+                               qr_url=f"/qr/{short_code}",
+                               qr_download=f"/qr/{short_code}/download")
 
     return render_template("index.html", short_url=None)
 
@@ -75,6 +79,45 @@ def redirect_url(short_code):
         conn.close()
         return "Link não encontrado!", 404
 
+# --- Geração de QR Code (visualizar no navegador) ---
+@app.route("/qr/<short_code>")
+def qr_code(short_code):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute("SELECT original_url FROM links WHERE short_code=?", (short_code,))
+    result = c.fetchone()
+    conn.close()
+
+    if result:
+        original_url = result[0]
+        img = qrcode.make(original_url)
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        buf.seek(0)
+        return send_file(buf, mimetype="image/png")
+    else:
+        return "QR Code não encontrado!", 404
+
+# --- Rota para baixar o QR Code ---
+@app.route("/qr/<short_code>/download")
+def qr_code_download(short_code):
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute("SELECT original_url FROM links WHERE short_code=?", (short_code,))
+    result = c.fetchone()
+    conn.close()
+
+    if result:
+        original_url = result[0]
+        img = qrcode.make(original_url)
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        buf.seek(0)
+        filename = f"qrcode_{short_code}.png"
+        return send_file(buf, mimetype="image/png", as_attachment=True, download_name=filename)
+    else:
+        return "QR Code não encontrado!", 404
+
 # --- Estatísticas ---
 @app.route("/stats")
 def stats():
@@ -83,7 +126,23 @@ def stats():
     c.execute("SELECT original_url, short_code, clicks FROM links")
     links = c.fetchall()
     conn.close()
-    return render_template("stats.html", links=links)
+
+    # Preparar dados
+    labels = [link[1] for link in links]   # short_code
+    data = [link[2] for link in links]     # clicks
+    total_links = len(links)
+    total_clicks = sum(data) if data else 0
+    top_link = max(links, key=lambda x: x[2]) if links else None
+
+    return render_template(
+        "stats.html",
+        links=links,
+        labels=labels,
+        data=data,
+        total_links=total_links,
+        total_clicks=total_clicks,
+        top_link=top_link
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
