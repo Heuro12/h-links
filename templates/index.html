@@ -51,7 +51,7 @@
         {% if short_url %}
             <div class="result">
                 <p>✅ Seu link encurtado:</p>
-                <input id="shortLink" type="text" value="http://127.0.0.1:5000{{ short_url }}" readonly>
+                <input id="shortLink" type="text" value="{{ short_url }}" readonly>
                 <button id="copyBtn" onclick="copyLink()">📋 Copiar</button>
 
                 <div class="qrcode">
@@ -62,8 +62,8 @@
 
                 <div class="share">
                     <p>🔗 Compartilhar:</p>
-                    <a href="https://wa.me/?text=http://127.0.0.1:5000{{ short_url }}" target="_blank">WhatsApp</a>
-                    <a href="https://t.me/share/url?url=http://127.0.0.1:5000{{ short_url }}" target="_blank">Telegram</a>
+                    <a href="https://wa.me/?text={{ short_url }}" target="_blank">WhatsApp</a>
+                    <a href="https://t.me/share/url?url={{ short_url }}" target="_blank">Telegram</a>
                 </div>
             </div>
         {% endif %}
