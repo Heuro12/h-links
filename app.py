@@ -54,10 +54,15 @@ def index():
         conn.commit()
         conn.close()
 
-        return render_template("index.html",
-                               short_url=f"/s/{short_code}",
-                               qr_url=f"/qr/{short_code}",
-                               qr_download=f"/qr/{short_code}/download")
+        # 🔥 Usar URL absoluta
+        base_url = request.host_url
+
+        return render_template(
+            "index.html",
+            short_url=f"{base_url}s/{short_code}",
+            qr_url=f"{base_url}qr/{short_code}",
+            qr_download=f"{base_url}qr/{short_code}/download"
+        )
 
     return render_template("index.html", short_url=None)
 
