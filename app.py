@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, send_file, jsonify
+from flask import Flask, render_template, request, redirect, send_file, jsonify, url_for
 import sqlite3
 import string, random
 import os
@@ -54,15 +54,12 @@ def index():
         conn.commit()
         conn.close()
 
-        # 🔥 Usar URL absoluta
-        base_url = request.host_url
+        base_url = request.url_root.strip("/")
 
-        return render_template(
-            "index.html",
-            short_url=f"{base_url}s/{short_code}",
-            qr_url=f"{base_url}qr/{short_code}",
-            qr_download=f"{base_url}qr/{short_code}/download"
-        )
+        return render_template("index.html",
+                               short_url=base_url + url_for("redirect_url", short_code=short_code),
+                               qr_url=base_url + url_for("qr_code", short_code=short_code),
+                               qr_download=base_url + url_for("qr_code_download", short_code=short_code))
 
     return render_template("index.html", short_url=None)
 
